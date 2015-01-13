@@ -6,7 +6,10 @@ public class Plasma : MonoBehaviour {
     Color32[] colour;
     int width = 128;
     int length = 128;
+    int counter = 60;
     float size;
+    float grey;
+    float col1, col2, col3, col4;
     int GRAIN = 8;
     Texture2D texture;
 
@@ -20,6 +23,11 @@ public class Plasma : MonoBehaviour {
 
         colour = new Color32[width * length];
 
+        col1 = Random.value;
+        col2 = Random.value;
+        col3 = Random.value;
+        col4 = Random.value;
+
         drawPlasma(width, length);
         texture.SetPixels32(colour);
         texture.Apply();
@@ -28,12 +36,18 @@ public class Plasma : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        if(Input.GetKeyDown("n"))
-        {
+        //if(Input.GetKeyDown("n"))
+       // {
+        counter--;
+        if(counter<=0)
+        {   
             drawPlasma(width, length);
             texture.SetPixels32(colour);
             texture.Apply();
+            counter = 60;
         }
+
+       // }
 	}
 
     float displace(float num)
@@ -81,6 +95,8 @@ public class Plasma : MonoBehaviour {
             b = (0.5f - c) * 2;
         }
 
+        grey=(0.299f*r)+(0.587f*g)+(0.114f*b);
+
         return new Color(r, g, b);
     }
 
@@ -122,13 +138,7 @@ public class Plasma : MonoBehaviour {
 
     void drawPlasma(float w, float l)
     {
-        float c1, c2, c3, c4;
-        c1 = Random.value;
-        c2 = Random.value;
-        c3 = Random.value;
-        c4 = Random.value;
-
-        divideGrid(0.0f, 0.0f, w, l, c1, c2, c3, c4);
+        divideGrid(0.0f, 0.0f, w, l, col1, col2, col3, col4);
     }
 
 }
