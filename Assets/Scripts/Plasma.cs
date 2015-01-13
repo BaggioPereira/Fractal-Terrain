@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Terrain : MonoBehaviour {
+public class Plasma : MonoBehaviour {
 
     Color32[] colour;
     int width = 128;
