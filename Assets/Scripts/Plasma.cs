@@ -9,6 +9,7 @@ public class Plasma : MonoBehaviour {
     int counter = 60;
     float size;
     float grey;
+    float blue;
     float col1, col2, col3, col4;
     int GRAIN = 8;
     Texture2D texture;
@@ -98,7 +99,7 @@ public class Plasma : MonoBehaviour {
             b = (0.5f - c) * 2;
         }
 
-        //grey=(0.299f*r)+(0.587f*g)+(0.114f*b);
+        grey = (0.299f * r) + (0.587f * g) + (0.114f * b);
 
         return new Color(r, g, b);
     }
