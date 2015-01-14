@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
+
 
 public class Plasma : MonoBehaviour {
 
@@ -33,21 +35,30 @@ public class Plasma : MonoBehaviour {
         drawPlasma(width, length);
         texture.SetPixels32(colour);
         texture.Apply();
+        byte[] img = texture.EncodeToPNG();
+        File.WriteAllBytes(Application.dataPath + "/../test" + ".png", img);
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
-        //if(Input.GetKeyDown("n"))
-       // {
+       if(Input.GetKeyDown("n"))
+       {
         //if statement for updating the scene ~once per second
-        counter--;
-        if(counter<=0)
-        {   
+        //counter--;
+        //if(counter<=0)
+        //{   
             drawPlasma(width, length);
             texture.SetPixels32(colour);
             texture.Apply();
-            counter = 60;
+            byte[] img = texture.EncodeToPNG();
+            File.WriteAllBytes(Application.dataPath + "/../test" + ".png", img);
+            //counter = 60;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
 
        // }
@@ -101,7 +112,7 @@ public class Plasma : MonoBehaviour {
 
         grey = (0.299f * r) + (0.587f * g) + (0.114f * b);
 
-        return new Color(r, g, b);
+        return new Color(r,g,b);
     }
 
     //divide the grid down
