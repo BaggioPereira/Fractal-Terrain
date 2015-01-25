@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.IO;
 
 public class Plasma : MonoBehaviour {
 
@@ -33,48 +34,28 @@ public class Plasma : MonoBehaviour {
         drawPlasma(width, length);
         texture.SetPixels(colour);
         texture.Apply();
-<<<<<<< HEAD
         byte[] img = texture.EncodeToPNG();
         File.WriteAllBytes(Application.dataPath + "/Terrain" + ".png", img);
         AssetDatabase.Refresh();
-=======
->>>>>>> parent of 633facf... Test for saving Texture2D as png
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
-<<<<<<< HEAD
        if(Input.GetKeyDown("n"))
        {
-=======
-        //if(Input.GetKeyDown("n"))
-       // {
-        //if statement for updating the scene ~once per second
-        counter--;
-        if(counter<=0)
-        {   
->>>>>>> parent of 633facf... Test for saving Texture2D as png
             drawPlasma(width, length);
             texture.SetPixels(colour);
             texture.Apply();
-<<<<<<< HEAD
             byte[] img = texture.EncodeToPNG();
             File.WriteAllBytes(Application.dataPath + "/Terrain" + ".png", img);
             AssetDatabase.Refresh();
-
-
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
-=======
-            counter = 60;
->>>>>>> parent of 633facf... Test for saving Texture2D as png
         }
-
-       // }
 	}
 
     float displace(float num)
@@ -122,14 +103,9 @@ public class Plasma : MonoBehaviour {
         {
             b = (0.5f - c) * 2;
         }
-
-<<<<<<< HEAD
-        return new Color(r,g,b);
-=======
         grey = (0.299f * r) + (0.587f * g) + (0.114f * b);
 
         return new Color(r, g, b);
->>>>>>> parent of 633facf... Test for saving Texture2D as png
     }
 
     //divide the grid down

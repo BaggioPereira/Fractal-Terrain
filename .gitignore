@@ -18,6 +18,7 @@ obj/
 *.user
 *.unityproj
 *.booproj
+*.aspx
  
 # ============ #
 # OS generated #
