@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.IO;
 
 
 public class Plasma : MonoBehaviour {
 
-    Color32[] colour;
-    int width = 128;
-    int length = 128;
-    int counter = 60;
+    Color[] colour;
+    int width = 1024;
+    int length = 1024;
     float size;
     float grey;
     float blue;
@@ -24,7 +24,7 @@ public class Plasma : MonoBehaviour {
         texture = new Texture2D(width, length);
         renderer.material.mainTexture = texture;
 
-        colour = new Color32[width * length];
+        colour = new Color[width * length];
 
         //set the four corners of the inital grid to a random colour
         col1 = Random.value;
@@ -33,10 +33,11 @@ public class Plasma : MonoBehaviour {
         col4 = Random.value;
 
         drawPlasma(width, length);
-        texture.SetPixels32(colour);
+        texture.SetPixels(colour);
         texture.Apply();
         byte[] img = texture.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/../test" + ".png", img);
+        File.WriteAllBytes(Application.dataPath + "/Terrain" + ".png", img);
+        AssetDatabase.Refresh();
 	}
 	
 	// Update is called once per frame
@@ -44,16 +45,14 @@ public class Plasma : MonoBehaviour {
     {
        if(Input.GetKeyDown("n"))
        {
-        //if statement for updating the scene ~once per second
-        //counter--;
-        //if(counter<=0)
-        //{   
             drawPlasma(width, length);
-            texture.SetPixels32(colour);
+            texture.SetPixels(colour);
             texture.Apply();
             byte[] img = texture.EncodeToPNG();
-            File.WriteAllBytes(Application.dataPath + "/../test" + ".png", img);
-            //counter = 60;
+            File.WriteAllBytes(Application.dataPath + "/Terrain" + ".png", img);
+            AssetDatabase.Refresh();
+
+
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -110,8 +109,6 @@ public class Plasma : MonoBehaviour {
             b = (0.5f - c) * 2;
         }
 
-        grey = (0.299f * r) + (0.587f * g) + (0.114f * b);
-
         return new Color(r,g,b);
     }
 
@@ -125,7 +122,7 @@ public class Plasma : MonoBehaviour {
         if(w < 1.0f || l < 1.0f)
         {
             float c = (c1 + c2 + c3 + c4) * 0.25f;
-            colour[(int)x + (int)y * width] = getColour(c);
+            //colour[(int)x + (int)y * width] = getColour(c);
         }
 
         else
@@ -161,5 +158,4 @@ public class Plasma : MonoBehaviour {
         //call operation to calculate averages and drawing
         divideGrid(0.0f, 0.0f, w, l, col1, col2, col3, col4);
     }
-
 }
