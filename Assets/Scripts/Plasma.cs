@@ -36,7 +36,7 @@ public class Plasma : MonoBehaviour {
         texture.SetPixels32(colour);
         texture.Apply();
         byte[] img = texture.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/../test" + ".png", img);
+        File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
 	}
 	
 	// Update is called once per frame
@@ -44,24 +44,17 @@ public class Plasma : MonoBehaviour {
     {
        if(Input.GetKeyDown("n"))
        {
-        //if statement for updating the scene ~once per second
-        //counter--;
-        //if(counter<=0)
-        //{   
             drawPlasma(width, length);
             texture.SetPixels32(colour);
             texture.Apply();
             byte[] img = texture.EncodeToPNG();
-            File.WriteAllBytes(Application.dataPath + "/../test" + ".png", img);
-            //counter = 60;
+            File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
-
-       // }
 	}
 
     float displace(float num)

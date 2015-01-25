@@ -4,13 +4,9 @@ using System.Collections;
 public class Perlin : MonoBehaviour
 {
 
-    int size = 128;
+    int size = 1024;
     float noiseScale;
     Texture2D texture;
-
-    Terrain terrain = null;
-    float[,] heights = null;
-    int resolution = 0;
 
     // Use this for initialization
     void Start()
@@ -43,10 +39,5 @@ public class Perlin : MonoBehaviour
                 texture.SetPixel(x, y, new Color(value, value, value, 1));
             }
         }
-    }
-
-    void applyTerrain()
-    {
-
     }
 }
