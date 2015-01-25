@@ -5,16 +5,17 @@ using System.IO;
 
 public class Plasma : MonoBehaviour {
 
-    Color32[] colour;
-    int width = 128;
-    int length = 128;
-    int counter = 60;
+    Color[] colour;
+    int width = 1024;
+    int length = 1024;
     float size;
     float grey;
-    float blue;
     float col1, col2, col3, col4;
     int GRAIN = 8;
-    Texture2D texture;
+    float r, g, b;
+    Texture2D texture, heightmap;
+    Terrain terrain;
+    float[,] heights;
 
 	// Use this for initialization
 	void Start () 
@@ -24,19 +25,23 @@ public class Plasma : MonoBehaviour {
         texture = new Texture2D(width, length);
         renderer.material.mainTexture = texture;
 
-        colour = new Color32[width * length];
+        colour = new Color[width * length];
 
-        //set the four corners of the inital grid to a random colour
+        //sets a random height between 0 and 1 for the 4 corners of the grid
         col1 = Random.value;
         col2 = Random.value;
         col3 = Random.value;
         col4 = Random.value;
 
+        terrain = (Terrain)gameObject.GetComponent("Terrain");
+        heights = new float[width, length];
+
         drawPlasma(width, length);
-        texture.SetPixels32(colour);
+        texture.SetPixels(colour);
         texture.Apply();
-        byte[] img = texture.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
+        //byte[] img = texture.EncodeToPNG();
+        //File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
+        setHeightMap();
 	}
 	
 	// Update is called once per frame
@@ -44,17 +49,24 @@ public class Plasma : MonoBehaviour {
     {
        if(Input.GetKeyDown("n"))
        {
+            col1 = Random.value;
+            col2 = Random.value;
+            col3 = Random.value;
+            col4 = Random.value;
             drawPlasma(width, length);
-            texture.SetPixels32(colour);
+            texture.SetPixels(colour);
             texture.Apply();
-            byte[] img = texture.EncodeToPNG();
-            File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
+            setHeightMap();
+            //byte[] img = texture.EncodeToPNG();
+            //File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
+
+
 	}
 
     float displace(float num)
@@ -66,7 +78,9 @@ public class Plasma : MonoBehaviour {
     //get a r, g, b value for each point on the grid
     Color getColour(float c)
     {
-        float r = 0, g = 0, b = 0;
+        r = 0;
+        g = 0;
+        b = 0;
 
         if(c < 0.5f)
         {
@@ -103,7 +117,7 @@ public class Plasma : MonoBehaviour {
             b = (0.5f - c) * 2;
         }
 
-        grey = (0.299f * r) + (0.587f * g) + (0.114f * b);
+        //grey = (0.299f * r) + (0.587f * g) + (0.114f * b);
 
         return new Color(r,g,b);
     }
@@ -147,12 +161,43 @@ public class Plasma : MonoBehaviour {
             divideGrid(x, y + newLength, newWidth, newLength, edge4, middle, edge3, c4);
         }
     }
-
-
+    
     void drawPlasma(float w, float l)
     {
         //call operation to calculate averages and drawing
         divideGrid(0.0f, 0.0f, w, l, col1, col2, col3, col4);
     }
 
+    //
+    //For terrain
+    void setHeightMap()
+    {
+        heightmap = new Texture2D(width, length);
+        Color color = new Color();
+        for(int i = 0; i < heightmap.height; i++)
+        {
+            for(int j = 0; j < heightmap.width; j++)
+            {
+                color = texture.GetPixel(i,j);
+                grey =  (0.299f * color.r) + (0.587f * color.g) + (0.114f * color.b);
+                color = new Color(grey, grey, grey);
+                heightmap.SetPixel(i, j, color);
+            }
+        }
+        loadHeightMap();
+    }
+
+    void loadHeightMap()
+    {
+        Color[] values = heightmap.GetPixels();
+        int index = 0;
+        for (int z = 0; z < heightmap.height; z++)
+        {
+            for (int x = 0; x < heightmap.width; x++)
+            {
+                heights[z, x] = values[index].r;
+                index++;
+            }
+        }
+    }
 }
