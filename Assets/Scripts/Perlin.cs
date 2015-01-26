@@ -5,7 +5,7 @@ public class Perlin : MonoBehaviour
 {
     int x, y, z;
     float r, g, b;
-    int size = 128;
+    int size = 1024;
     float TWO_PI = Mathf.PI * 2;
     float noiseScale;
     int[] perlin = new int[512];

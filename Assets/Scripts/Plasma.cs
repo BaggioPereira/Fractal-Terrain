@@ -11,7 +11,6 @@ public class Plasma : MonoBehaviour {
     float size;
     float grey;
     float cor1, cor2, cor3, cor4;
-    int GRAIN = 8;
     float r, g, b;
     Texture2D texture, heightmap;
     float[,] heights;
@@ -33,16 +32,13 @@ public class Plasma : MonoBehaviour {
         cor2 = Random.value;
         cor3 = Random.value;
         cor4 = Random.value;
-
-        //terrain = (Terrain)gameObject.GetComponent("Terrain");
         heights = new float[width, length];
 
         drawPlasma(width, length);
         texture.SetPixels(colour);
         texture.Apply();
-        //byte[] img = texture.EncodeToPNG();
-        //File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
-        setHeightMap();
+        
+        loadHeightMap();
 	}
 	
 	// Update is called once per frame
@@ -62,9 +58,7 @@ public class Plasma : MonoBehaviour {
             drawPlasma(width, length);
             texture.SetPixels(colour);
             texture.Apply();
-            setHeightMap();
-            //byte[] img = texture.EncodeToPNG();
-            //File.WriteAllBytes(Application.dataPath + "/Plasma" + ".png", img);
+            loadHeightMap();
         }
 
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -77,7 +71,7 @@ public class Plasma : MonoBehaviour {
 
     float displace(float num)
     {
-        float max = num / size * GRAIN;
+        float max = num / size * 8;
         return Random.Range(-0.5f, 0.5f) * max;
     }
 
@@ -175,42 +169,18 @@ public class Plasma : MonoBehaviour {
     }
 
     //For terrain
-    void setHeightMap()
-    {
-        heightmap = new Texture2D(width, length);
-        Color color = new Color();
-        for(int i = 0; i < heightmap.height; i++)
-        {
-            for(int j = 0; j < heightmap.width; j++)
-            {
-                color = texture.GetPixel(i,j);
-                //grey =  (0.299f * color.r) + (0.587f * color.g) + (0.114f * color.b);
-                //color = new Color(grey,grey,grey);
-                heightmap.SetPixel(i, j, color);
-            }
-        }
-        loadHeightMap();
-    }
-
     void loadHeightMap()
     {
-        Color[] values = heightmap.GetPixels();
+        Color[] values = texture.GetPixels();
         int index = 0;
-        for (int z = 0; z < heightmap.height; z++)
+        for (int z = 0; z < texture.height; z++)
         {
-            for (int x = 0; x < heightmap.width; x++)
+            for (int x = 0; x < texture.width; x++)
             {
                 heights[z, x] = values[index].grayscale;
                 index++;
             }
         }
-        //for (int i = 0; i != heights.Length; i++)
-        //{
-        //    for (int j = 0; j != heights.Length; j++)
-        //    {
-        //        Debug.Log(heights[i, j]);
-        //    }
-        //}
         applyTerrain();
     }
 
