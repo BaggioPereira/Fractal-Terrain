@@ -10,11 +10,10 @@ public class Plasma : MonoBehaviour {
     int length = 1024;
     float size;
     float grey;
-    float col1, col2, col3, col4;
+    float cor1, cor2, cor3, cor4;
     int GRAIN = 8;
     float r, g, b;
     Texture2D texture, heightmap;
-    //Terrain terrain;
     float[,] heights;
     GameObject terrain;
     TerrainData tData;
@@ -30,10 +29,10 @@ public class Plasma : MonoBehaviour {
         colour = new Color[width * length];
 
         //sets a random height between 0 and 1 for the 4 corners of the grid
-        col1 = Random.value;
-        col2 = Random.value;
-        col3 = Random.value;
-        col4 = Random.value;
+        cor1 = Random.value;
+        cor2 = Random.value;
+        cor3 = Random.value;
+        cor4 = Random.value;
 
         //terrain = (Terrain)gameObject.GetComponent("Terrain");
         heights = new float[width, length];
@@ -51,10 +50,15 @@ public class Plasma : MonoBehaviour {
     {
        if(Input.GetKeyDown("n"))
        {
-            col1 = Random.value;
-            col2 = Random.value;
-            col3 = Random.value;
-            col4 = Random.value;
+           GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+           for (int i = 0; i < objs.Length; i++ )
+           {
+               Destroy(objs[i]);
+           }
+            cor1 = Random.value;
+            cor2 = Random.value;
+            cor3 = Random.value;
+            cor4 = Random.value;
             drawPlasma(width, length);
             texture.SetPixels(colour);
             texture.Apply();
@@ -167,10 +171,9 @@ public class Plasma : MonoBehaviour {
     void drawPlasma(float w, float l)
     {
         //call operation to calculate averages and drawing
-        divideGrid(0.0f, 0.0f, w, l, col1, col2, col3, col4);
+        divideGrid(0.0f, 0.0f, w, l, cor1, cor2, cor3, cor4);
     }
 
-    //
     //For terrain
     void setHeightMap()
     {
@@ -215,6 +218,7 @@ public class Plasma : MonoBehaviour {
     {
         tData = new TerrainData();
         tData.heightmapResolution = width;
+        tData.size = new Vector3(width, 255, width);
         tData.SetHeights(0, 0, heights);
         SplatPrototype[] terrainTexture = new SplatPrototype[1];
         terrainTexture[0] = new SplatPrototype();
@@ -223,5 +227,6 @@ public class Plasma : MonoBehaviour {
         tData.splatPrototypes = terrainTexture;
         terrain = Terrain.CreateTerrainGameObject(tData);
         terrain.name = "Terrain";
+        terrain.tag = "Player";
     }
 }
