@@ -12,6 +12,7 @@ public class Perlin : MonoBehaviour
     Color32[] colour;
     Texture2D texture;
     GameObject camera;
+    GUIText guiText;
 
     // Use this for initialization
     void Start()
@@ -19,7 +20,7 @@ public class Perlin : MonoBehaviour
         texture = new Texture2D(size, size);
         renderer.material.mainTexture = texture;
         camera = GameObject.FindGameObjectWithTag("MainCamera");
-        camera.transform.position = new Vector3(0,12,0);
+        camera.transform.position = new Vector3(0, 12, 0);
         colour = new Color32[size * size];
         noiseScale = Random.Range(0.01f, 0.1f);
         permutationSetup();
