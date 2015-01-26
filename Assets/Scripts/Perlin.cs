@@ -5,18 +5,21 @@ public class Perlin : MonoBehaviour
 {
     int x, y, z;
     float r, g, b;
-    int size = 1024;
+    int size = 256;
     float TWO_PI = Mathf.PI * 2;
     float noiseScale;
     int[] perlin = new int[512];
     Color32[] colour;
     Texture2D texture;
+    GameObject camera;
 
     // Use this for initialization
     void Start()
     {
         texture = new Texture2D(size, size);
         renderer.material.mainTexture = texture;
+        camera = GameObject.FindGameObjectWithTag("MainCamera");
+        camera.transform.position = new Vector3(0,12,0);
         colour = new Color32[size * size];
         noiseScale = Random.Range(0.01f, 0.1f);
         permutationSetup();
@@ -42,6 +45,11 @@ public class Perlin : MonoBehaviour
         z++;
         texture.SetPixels32(colour);
         texture.Apply();
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     Color getColour(float c)

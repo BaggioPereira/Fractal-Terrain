@@ -14,8 +14,9 @@ public class Plasma : MonoBehaviour {
     float r, g, b;
     Texture2D texture, heightmap;
     float[,] heights;
-    GameObject terrain;
+    GameObject terrain, camera;
     TerrainData tData;
+    public bool orbit = false;
 
 	// Use this for initialization
 	void Start () 
@@ -24,6 +25,10 @@ public class Plasma : MonoBehaviour {
 
         texture = new Texture2D(width, length);
         renderer.material.mainTexture = texture;
+
+        camera = GameObject.FindGameObjectWithTag("MainCamera");
+        camera.transform.position = new Vector3(525, 1450, -250);
+        camera.transform.LookAt(new Vector3(512, 0, 512), Vector3.up);
 
         colour = new Color[width * length];
 
@@ -66,7 +71,23 @@ public class Plasma : MonoBehaviour {
             Application.Quit();
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (orbit == true)
+            {
+                orbit = false;
+            }
 
+            else
+            {
+                orbit = true;
+            }
+        }
+
+        if (orbit)
+        {
+            camera.transform.RotateAround(new Vector3(512, 0, 512), Vector3.up, Time.deltaTime * 15);
+        }
 	}
 
     float displace(float num)
