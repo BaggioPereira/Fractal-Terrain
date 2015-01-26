@@ -14,8 +14,10 @@ public class Plasma : MonoBehaviour {
     int GRAIN = 8;
     float r, g, b;
     Texture2D texture, heightmap;
-    Terrain terrain;
+    //Terrain terrain;
     float[,] heights;
+    GameObject terrain;
+    TerrainData tData;
 
 	// Use this for initialization
 	void Start () 
@@ -33,7 +35,7 @@ public class Plasma : MonoBehaviour {
         col3 = Random.value;
         col4 = Random.value;
 
-        terrain = (Terrain)gameObject.GetComponent("Terrain");
+        //terrain = (Terrain)gameObject.GetComponent("Terrain");
         heights = new float[width, length];
 
         drawPlasma(width, length);
@@ -179,8 +181,8 @@ public class Plasma : MonoBehaviour {
             for(int j = 0; j < heightmap.width; j++)
             {
                 color = texture.GetPixel(i,j);
-                grey =  (0.299f * color.r) + (0.587f * color.g) + (0.114f * color.b);
-                color = new Color(grey, grey, grey);
+                //grey =  (0.299f * color.r) + (0.587f * color.g) + (0.114f * color.b);
+                //color = new Color(grey,grey,grey);
                 heightmap.SetPixel(i, j, color);
             }
         }
@@ -195,9 +197,31 @@ public class Plasma : MonoBehaviour {
         {
             for (int x = 0; x < heightmap.width; x++)
             {
-                heights[z, x] = values[index].r;
+                heights[z, x] = values[index].grayscale;
                 index++;
             }
         }
+        //for (int i = 0; i != heights.Length; i++)
+        //{
+        //    for (int j = 0; j != heights.Length; j++)
+        //    {
+        //        Debug.Log(heights[i, j]);
+        //    }
+        //}
+        applyTerrain();
+    }
+
+    void applyTerrain()
+    {
+        tData = new TerrainData();
+        tData.heightmapResolution = width;
+        tData.SetHeights(0, 0, heights);
+        SplatPrototype[] terrainTexture = new SplatPrototype[1];
+        terrainTexture[0] = new SplatPrototype();
+        terrainTexture[0].texture = texture;
+        terrainTexture[0].tileSize = new Vector2(width,length);
+        tData.splatPrototypes = terrainTexture;
+        terrain = Terrain.CreateTerrainGameObject(tData);
+        terrain.name = "Terrain";
     }
 }
